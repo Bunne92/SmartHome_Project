@@ -11,7 +11,6 @@ const char* ssid = "Molk";
 const char* password = "Molk0901";
 boolean wifiConnected = false;
 
-//Joel suger hästballe!!!!
 
 
 // UDP variables
