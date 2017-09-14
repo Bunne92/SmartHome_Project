@@ -6,7 +6,11 @@
 <body>
 Hello world!<br/>
 <form action="" method="post">
-    <button type="submit" name="sub" value="HELLO!">HELLO!</button>
+    <button type="submit" name="sub" value="1 HELLO!">HELLO!</button>
+</form>
+
+<form action="" method="post">
+    <button type="submit" name="view_file" value="">sensor1.txt!</button>
 </form>
 
 </body>
@@ -26,19 +30,21 @@ if(isset($_POST['sub']))
 {
     $msg = $_POST['sub'];
     $len = strlen($msg);
-    socket_sendto($sock, $msg, $len, 0, '192.168.0.21', 8888);
-    socket_close($sock);
+    socket_sendto($sock, $msg, $len, 0, '192.168.1.69', 8888);
     //echo sendmessage($_POST['sub']);
 }
 
+if(isset($_POST['view_file']))
+{
+  $f = fopen("sensor1.txt", "r");
+  // Read line from the text file and write the contents to the client
+  while(($row = fgets($f, filesize("sensor1.txt"))) !== false) {
+      echo $row."<br>";
+  }
+  // echo fgets($f, filesize("sensor1.txt"));
+  fclose($f);
+}
 
-
-// $f = fopen("data.txt", "r");
-//
-// // Read line from the text file and write the contents to the client
-// echo fgets($f);
-//
-// fclose($f);
-
+socket_close($sock);
 
 ?>

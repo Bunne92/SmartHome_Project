@@ -12,16 +12,20 @@ int main(void) {
   char buf[BUFLEN];
 
   // Sensor dataparametrar
-  char *snr, *sd;
+  char *sensor_number, *sensor_data;
+  // int snr, sd;
 
   // Filhanterings parametrar
   FILE *fp1, *fp2;
 
-  char *getElementFromChar(char *theString, int number) {
+  // Funktion för att plocka ut ett specifikt ord i en sträng
+  char *getElementFromChar(char *theString, int nr) {
       char *token;
       const char s[2] = " ";
+
       token = strtok(theString, s);
-      for(int i = 0; i < number; i++) {
+      int i;
+      for(i = 0; i < nr; i++) {
           token = strtok(NULL, s);
       }
       return token;
@@ -42,21 +46,23 @@ int main(void) {
 
       //print details of the client/peer and the data received
       printf("Received packet from %s:%d\n", inet_ntoa(clients.sin_addr), ntohs(clients.sin_port));
-      printf("Data: %s\n" , buf);
+    //  printf("Data: %s\n" , buf);
 
-      snr = getElementFromChar(buf, 0);
-      sd = getElementFromChar(buf, 1);
-      printf("\nsnr: %d   sd: %d\n", snr, sd);
+      sensor_data = getElementFromChar(buf, 1);
+      //printf("I bufferten finns nu: %s\n", buf);
+      sensor_number = getElementFromChar(buf, 0);
 
-      if(snr == "1") {
-          fp1 = fopen("/var/www/html/sensor1.txt", "w");
-          fprintf(fp1, "%d", sd);
-          fprintf(fp1, "%s", "\n");
+      printf("snr: %s   sd: %s\n", sensor_number, sensor_data);
+
+      if(strcmp(sensor_number, "1") == 0) {
+          fp1 = fopen("sensor1.txt", "a");
+          fprintf(fp1, "%s\n", sensor_data);
+          //fprintf(fp1, "%s", "\n");
           fclose(fp1);
-      } else if(snr == "2") {
-          fp2 = fopen("/var/www/html/sensor2.txt", "w");
-          fprintf(fp2, "%d", sd);
-          fprintf(fp2, "%s", "\n");
+      } else if(strcmp(sensor_number, "2") == 0) {
+          fp2 = fopen("sensor2.txt", "a");
+          fprintf(fp2, "%s\n", sensor_data);
+          //fprintf(fp2, "%s", "\n");
           fclose(fp2);
       }
 
