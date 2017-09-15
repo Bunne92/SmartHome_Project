@@ -35,23 +35,12 @@ void setup() {
 void loop() {
   // check if UDP connections were successful
 
-    
-    Serial.print(y);
-    Serial.print("\n");
-    delay(100);
-    if(udpConnected)
-    {   
-      for(int i = 0; i <= 10; i++){
-        value += analogRead(A0);
-        delay(20); 
-      }
-      value = value/10;
-      y = map(value, 10, 700, 0, 1024); 
-      value = 0; 
+    if(udpConnected){
+      y = 40; 
       itoa(y,ReplyBuffer,10);
-      
+      delay(450); 
       UDP.beginPacket(remote, localPort);
-      UDP.write("1 ");
+      UDP.write("2 ");
       UDP.write(ReplyBuffer);
       UDP.endPacket();
         delay(100); 
