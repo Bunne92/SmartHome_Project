@@ -2,22 +2,23 @@
 
 #include <ESP8266WiFi.h>
 #include <WiFiUDP.h>
+#include <stdlib.h>
+#include <stdio.h>
 
  boolean connectUDP();
  boolean connectWifi();
  
 // wifi connection variables
-const char* ssid = "ASUS";
-const char* password = "bajskorv";
+const char* ssid = "COMHEM_cf3149";
+const char* password = "btn2qty2";
 boolean wifiConnected = false;
 
 // UDP variables
-unsigned int localPort = 80;
+unsigned int localPort = 8888;
 WiFiUDP UDP;
 boolean udpConnected = false;
 char packetBuffer[UDP_TX_PACKET_MAX_SIZE]; //buffer to hold incoming packet,
-char ReplyBuffer[5]; // a string to send back
-
+char ReplyBuffer[2]; // a string to send back
 int buttonstate = LOW; 
   
 void setup() {
@@ -36,25 +37,23 @@ void loop() {
   // check if the WiFi and UDP connections were successful
   if(wifiConnected)
   {
-    int i = analogRead(A0);
+    memset(ReplyBuffer,0,2);
+    int i = analogRead(A0), y;
+    delay(100);
+    y = map(i, 30, 1024, 0, 1024); 
     Serial.print(i);
     Serial.print("\n");
-    delay(100); 
-    sprintf (ReplyBuffer, "%04i", i);
+    itoa(i,ReplyBuffer,10);
+    Serial.print(ReplyBuffer); 
     if(udpConnected)
     {
-      //Serial.print(analogRead(2)); 
-      //Serial.print("\n");
-      //buttonstate = digitalRead(2);
-      //if(buttonstate == HIGH){
-       IPAddress remote(192,168,1,60);
-      // if there’s data available, read a packet
-       int packetSize = UDP.parsePacket();
       
+        IPAddress remote(192,168,0,21);
         UDP.beginPacket(remote, localPort);
+        UDP.write("1 ");
         UDP.write(ReplyBuffer);
         UDP.endPacket();
-        delay(10);
+        delay(1000);
       //} 
     }
   }
