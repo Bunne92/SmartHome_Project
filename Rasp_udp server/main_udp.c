@@ -1,4 +1,6 @@
 #include "udp_server.h"
+#include "mean.h"
+#include <time.h>
 
 #define BUFLEN 512  // Buffer längd
 #define PORT 8888   // Port för inkommande data
@@ -13,10 +15,12 @@ int main(void) {
 
   // Sensor dataparametrar
   char *sensor_number, *sensor_data;
-  // int snr, sd;
 
   // Filhanterings parametrar
-  FILE *fp1, *fp2;
+  FILE *fp, *fp_latest, *fp_mean;
+
+  // Beräkna medelvärdet efter denna "tid"
+  int mean_time = 6;
 
   // Funktion för att plocka ut ett specifikt ord i en sträng
   char *getElementFromChar(char *theString, int nr) {
@@ -32,6 +36,10 @@ int main(void) {
   }
 
 
+  // Lagra undan position i filen
+  int sense1_txt_pos = 0, sense2_txt_pos = 0;
+  char sensor1_time_stamp1[80], sensor2_time_stamp1[80];
+  int cntr1 = 0, cntr2 = 0;
   while(1)
   {
       printf("Waiting for data...");
@@ -54,16 +62,59 @@ int main(void) {
 
       printf("snr: %s   sd: %s\n", sensor_number, sensor_data);
 
+      // Ta tiden
+      time_t t = time(NULL);
+      struct tm *tm = localtime(&t);
+
       if(strcmp(sensor_number, "1") == 0) {
-          fp1 = fopen("sensor1.txt", "a");
-          fprintf(fp1, "%s\n", sensor_data);
-          //fprintf(fp1, "%s", "\n");
-          fclose(fp1);
+          cntr1++;
+          if(cntr1 == 1) {
+              strftime(sensor1_time_stamp1, 80, "%Y-%m-%d %H:%M:%S", tm);
+          }
+
+          fp = fopen("sensor1.txt", "a");
+          fprintf(fp, "%s %d-%d-%d %d:%d:%d\n",
+           sensor_data, tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
+          fclose(fp);
+
+          if (cntr1 == mean_time) {
+              fp_mean = fopen("sensor1.txt", "a+");
+              mean(&fp_mean, 1, &sense1_txt_pos, sensor1_time_stamp1);
+              fclose(fp_mean);
+              cntr1 = 0;
+          }
+
+
+          // Spara undan i filen som endast visar senaste värdet
+          fp_latest = fopen("sensor1_latest.txt", "w");
+          fprintf(fp_latest, "%s    %d-%d-%d %d:%d:%d",
+           sensor_data,  tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
+          fclose(fp_latest);
+
       } else if(strcmp(sensor_number, "2") == 0) {
-          fp2 = fopen("sensor2.txt", "a");
-          fprintf(fp2, "%s\n", sensor_data);
-          //fprintf(fp2, "%s", "\n");
-          fclose(fp2);
+          cntr2++;
+          if(cntr2 == 1) {
+              strftime(sensor2_time_stamp1, 80, "%Y-%m-%d %H:%M:%S", tm);
+          }
+
+          fp = fopen("sensor2.txt", "a");
+          fprintf(fp, "%s %d-%d-%d %d:%d:%d\n",
+           sensor_data,  tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
+          fclose(fp);
+
+          if(cntr2 == mean_time) {
+              fp_mean = fopen("sensor2.txt", "a+");
+              mean(&fp_mean, 2, &sense2_txt_pos, sensor2_time_stamp1);
+              fclose(fp_mean);
+              cntr2 = 0;
+          }
+
+
+          // Spara undan i filen som endast visar senaste värdet
+          fp_latest = fopen("sensor2_latest.txt", "w");
+          fprintf(fp_latest, "%s %d-%d-%d %d:%d:%d",
+           sensor_data,  tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
+          fclose(fp_latest);
       }
 
   }
