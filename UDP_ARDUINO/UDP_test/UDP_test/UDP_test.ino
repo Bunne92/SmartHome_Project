@@ -32,6 +32,7 @@ void setup() {
      udpConnected = connectUDP();
   }
 }
+
 void loop() {
   // check if UDP connections were successful
 
@@ -43,7 +44,7 @@ void loop() {
     {   
       for(int i = 0; i <= 10; i++){
         value += analogRead(A0);
-        delay(20); 
+        delay(10); 
       }
       value = value/10;
       y = map(value, 10, 700, 0, 1024); 
@@ -58,6 +59,9 @@ void loop() {
       } 
   }
 
+  
+
+//----------------------------------------FUNCTIONS--------------------------------------------
 
 // connect to UDP – returns true if successful or false if not
  boolean connectUDP()
