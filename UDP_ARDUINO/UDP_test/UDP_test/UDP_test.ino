@@ -6,10 +6,10 @@
 
 boolean connectUDP();
 boolean connectWifi();
- 
+
 // wifi connection variables
-const char* ssid = "ASUS";
-const char* password = "bajskorv";
+const char* ssid = "D-Link_GO-RT-N300";
+//const char* password = "Molk0901";
 boolean wifiConnected = false;
 int value = 0, y = 0; 
 
@@ -17,7 +17,7 @@ int value = 0, y = 0;
 unsigned int localPort = 8888;
 WiFiUDP UDP;
 boolean udpConnected = false;
-IPAddress remote(192,168,1,60);
+IPAddress remote(192,168,0,2);
 char ReplyBuffer[10]; // a string to send back
 
 
@@ -86,7 +86,7 @@ void loop() {
  {
     boolean state = true;
     int i = 0;
-    WiFi.begin(ssid, password);
+    WiFi.begin(ssid);
     Serial.println("");
     Serial.println("Connecting to WiFi");
 
