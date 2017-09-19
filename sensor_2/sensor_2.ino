@@ -1,62 +1,52 @@
-// hej !  
 
 #include <ESP8266WiFi.h>
 #include <WiFiUDP.h>
+#include <stdlib.h>
+#include <stdio.h>
 
- boolean connectUDP();
- boolean connectWifi();
+boolean connectUDP();
+boolean connectWifi();
  
 // wifi connection variables
-const char* ssid = "Molk";
-const char* password = "Molk0901";
+const char* ssid = "ASUS";
+const char* password = "bajskorv";
 boolean wifiConnected = false;
-
-
+int value = 0, y = 0; 
 
 // UDP variables
-unsigned int localPort = 80;
+unsigned int localPort = 8888;
 WiFiUDP UDP;
 boolean udpConnected = false;
-char packetBuffer[UDP_TX_PACKET_MAX_SIZE]; //buffer to hold incoming packet,
-char ReplyBuffer[] = "GAY SENSOR ACTIVATED 100% GAY"; // a string to send back
+IPAddress remote(192,168,1,60);
+char ReplyBuffer[10]; // a string to send back
 
-int buttonstate = LOW; 
+
   
 void setup() {
-  // Initialise Serial connection
   Serial.begin(115200);
-  pinMode(2, OUTPUT); 
   // Initialise wifi connection
   wifiConnected = connectWifi();
   
   // only proceed if wifi connection successful
-  if(wifiConnected)
-  {
+  if(wifiConnected){
      udpConnected = connectUDP();
   }
 }
 void loop() {
-  // check if the WiFi and UDP connections were successful
-  if(wifiConnected)
-  {
-    if(udpConnected)
-    {
-      buttonstate = digitalRead(2);
-      if(buttonstate == HIGH){
-       IPAddress remote(192,168,153,156);
-      // if there’s data available, read a packet
-       int packetSize = UDP.parsePacket();
-      
-        UDP.beginPacket(remote, localPort);
-        UDP.write(ReplyBuffer);
-        UDP.endPacket();
-        delay(10);
+  // check if UDP connections were successful
+
+    if(udpConnected){
+      y = 40; 
+      itoa(y,ReplyBuffer,10);
+      delay(450); 
+      UDP.beginPacket(remote, localPort);
+      UDP.write("2 ");
+      UDP.write(ReplyBuffer);
+      UDP.endPacket();
+        delay(100); 
       } 
-    }
-  
   }
 
-}
 
 // connect to UDP – returns true if successful or false if not
  boolean connectUDP()
@@ -80,7 +70,7 @@ void loop() {
 }
 
     
-    // connect to wifi – returns true if successful or false if not
+// connect to wifi – returns true if successful or false if not
  boolean connectWifi()
  {
     boolean state = true;

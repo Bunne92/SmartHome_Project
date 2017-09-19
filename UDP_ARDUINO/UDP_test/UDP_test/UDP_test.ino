@@ -1,65 +1,63 @@
-  
 
 #include <ESP8266WiFi.h>
 #include <WiFiUDP.h>
+#include <stdlib.h>
+#include <stdio.h>
 
- boolean connectUDP();
- boolean connectWifi();
- 
+boolean connectUDP();
+boolean connectWifi();
+
 // wifi connection variables
-const char* ssid = "ASUS";
-const char* password = "bajskorv";
+const char* ssid = "D-Link_GO-RT-N300";
+//const char* password = "Molk0901";
 boolean wifiConnected = false;
+int value = 0, y = 0; 
 
 // UDP variables
-unsigned int localPort = 80;
+unsigned int localPort = 8888;
 WiFiUDP UDP;
 boolean udpConnected = false;
-char packetBuffer[UDP_TX_PACKET_MAX_SIZE]; //buffer to hold incoming packet,
-char ReplyBuffer[5]; // a string to send back
+IPAddress remote(192,168,0,2);
+char ReplyBuffer[10]; // a string to send back
 
-int buttonstate = LOW; 
+
   
 void setup() {
-  // Initialise Serial connection
   Serial.begin(115200);
   // Initialise wifi connection
   wifiConnected = connectWifi();
   
   // only proceed if wifi connection successful
-  if(wifiConnected)
-  {
+  if(wifiConnected){
      udpConnected = connectUDP();
   }
 }
 void loop() {
-  // check if the WiFi and UDP connections were successful
-  if(wifiConnected)
-  {
-    int i = analogRead(A0);
-    Serial.print(i);
+  // check if UDP connections were successful
+
+    
+    Serial.print(y);
     Serial.print("\n");
-    delay(100); 
-    sprintf (ReplyBuffer, "%04i", i);
+    delay(100);
     if(udpConnected)
-    {
-      //Serial.print(analogRead(2)); 
-      //Serial.print("\n");
-      //buttonstate = digitalRead(2);
-      //if(buttonstate == HIGH){
-       IPAddress remote(192,168,1,60);
-      // if there’s data available, read a packet
-       int packetSize = UDP.parsePacket();
+    {   
+      for(int i = 0; i <= 10; i++){
+        value += analogRead(A0);
+        delay(20); 
+      }
+      value = value/10;
+      y = map(value, 10, 700, 0, 1024); 
+      value = 0; 
+      itoa(y,ReplyBuffer,10);
       
-        UDP.beginPacket(remote, localPort);
-        UDP.write(ReplyBuffer);
-        UDP.endPacket();
-        delay(10);
-      //} 
-    }
+      UDP.beginPacket(remote, localPort);
+      UDP.write("1 ");
+      UDP.write(ReplyBuffer);
+      UDP.endPacket();
+        delay(100); 
+      } 
   }
 
-}
 
 // connect to UDP – returns true if successful or false if not
  boolean connectUDP()
@@ -83,12 +81,12 @@ void loop() {
 }
 
     
-    // connect to wifi – returns true if successful or false if not
+// connect to wifi – returns true if successful or false if not
  boolean connectWifi()
  {
     boolean state = true;
     int i = 0;
-    WiFi.begin(ssid, password);
+    WiFi.begin(ssid);
     Serial.println("");
     Serial.println("Connecting to WiFi");
 
