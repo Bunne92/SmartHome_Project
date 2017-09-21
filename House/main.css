@@ -1,0 +1,87 @@
+#house{
+    background: url("bilder/Hall.jpg");
+    outline: thick black solid;
+    margin: 5% 5% 5% 5%;
+    display: flex;
+    flex-direction: column;
+    width: 1200px;
+    height: 1000px;
+    box-shadow: 10px 10px 10px black;
+}
+#half{
+    display: flex;
+    flex-direction: row;
+    height: 50%;
+    width: 100%;
+}
+#liv_room{
+    background-image: url("bilder/Livingroom.jpg");
+    outline: thin black solid;
+    width: 700px;
+    height: 450px;
+}
+#kitchen{
+    background-image: url("bilder/Kitchen.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%, 100%;
+    border-bottom: thin black solid;
+    width: 500px;
+    height: 400px;
+}
+#bathroom{
+    background-image: url("bilder/Bathroom.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%, 100%;
+    outline: thin black solid;
+    margin-top: 100px;
+    width: 500px;
+    height: 400px;
+}
+#bedroom{
+    background-image: url("bilder/Bedroom.jpg");
+    background-repeat: no-repeat;
+    outline: thin black solid;
+    margin-top: 50px;
+    margin-left: 100px;
+    width: 600px;
+    height: 450px;
+}
+            
+div{
+    font-family: "Lucida Concole", monospace, times;
+    text-align: center;
+    font-size: 45px;
+    color: #FFF146;
+    text-shadow: 5px 2px black;
+}
+#Gif{
+    background-image: url(bilder/200.gif);
+    position: absolute;
+    margin-top: 0px;
+    margin-left: 5%;
+    width: 1200px;
+    height: 1000px;
+    display: none;
+    border-radius: 20px;
+}
+input{
+    font-family: "Lucida Concole", monospace, times;
+    text-align: center;
+    font-size: 15px;
+    border-radius: 50%;
+    position: fixed;
+}
+#reload{
+    background: lightgreen;
+    width: 100px;
+    height: 100px;
+    margin-left: 70px;
+    margin-top: 10px;
+}
+#med_vard{
+    background: red;
+    width: 100px;
+    height: 100px;
+    margin-left: 70px;
+    margin-top: 150px;
+}
