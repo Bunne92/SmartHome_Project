@@ -12,7 +12,7 @@
             <source src="petit_poney.mp3" type="audio/mpeg">
         </audio>
         
-        <form action="House.php" method="get">
+        <form action="Index.php" method="get">
             <input type="submit" value="Uppdatera" id="reload"/>
         </form>
         <form action="House_Med.php" method="get">
@@ -32,7 +32,7 @@
             }
         </script>
         <?php
-            $myfile = fopen("Med_Dag.txt", "r") or die("Unable to open file!");
+            $myfile = fopen("sensor2_min.txt", "r") or die("Unable to open file!");
         ?>
         <div id="Gif"></div>
         <div id="house">

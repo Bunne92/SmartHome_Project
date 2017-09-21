@@ -12,7 +12,7 @@
             <source src="petit_poney.mp3" type="audio/mpeg">
         </audio>
         
-        <form action="House.php" method="get">
+        <form action="Index.php" method="get">
             <input type="submit" value="Uppdatera" id="reload"/>
         </form>
         <form action="House_Med.php" method="get">
@@ -32,7 +32,8 @@
             }
         </script>
         <?php
-            $myfile = fopen("Current_Temp.txt", "r") or die("Unable to open file!");
+            $myfile = fopen("Sensor2_latest.txt", "r") or die("Unable to open file!");
+			//sensor2 = Temp | sensor1 = Light | _latest = senaste | _min = medelvärdet
         ?>
         <div id="Gif"></div>
         <div id="Gif2"></div>
