@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Sensor Hus</title>
+        <title></title>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="main.css" type="text/css">
     </head>
